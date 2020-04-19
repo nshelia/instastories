@@ -100,7 +100,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegateFlowLayout
 		let photoView = viewModel.photos.value[indexPath.row]
 		
 		let transition: CATransition = CATransition()
-		transition.duration = 0.5
+		transition.duration = Constants.fadeTransitionDuration
 		transition.type = CATransitionType.fade
 		self.navigationController?.view.layer.add(transition, forKey: nil)
 		

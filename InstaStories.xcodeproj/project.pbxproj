@@ -14,6 +14,7 @@
 		F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */; };
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
 		F162EEE22434E6D200FA0B49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F162EEE12434E6D200FA0B49 /* Assets.xcassets */; };
+		F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19ABF40244C9B2C005C8ED9 /* Constants.swift */; };
 		F1BFD685244B659800513C9A /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BFD684244B659800513C9A /* PhotoView.swift */; };
 		F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */; };
 		F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */; };
@@ -34,6 +35,7 @@
 		F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F162EEE12434E6D200FA0B49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F162EEE62434E6D200FA0B49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F19ABF40244C9B2C005C8ED9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F1BFD684244B659800513C9A /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
 		F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
@@ -60,7 +62,6 @@
 				7974F03D1C3445B97183E971 /* Pods-InstaStories.debug.xcconfig */,
 				B67CD3D2F780600E6DF881B1 /* Pods-InstaStories.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -116,6 +117,7 @@
 				F1FA0CE124466AE1005D2801 /* Extensions */,
 				F111BA9D2444F814001EAAF7 /* ViewModels */,
 				F162EED82434E6CD00FA0B49 /* AppDelegate.swift */,
+				F19ABF40244C9B2C005C8ED9 /* Constants.swift */,
 				F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */,
 				F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */,
 				F162EEE12434E6D200FA0B49 /* Assets.xcassets */,
@@ -256,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1FA0CE524466E0C005D2801 /* PhotosViewModel.swift in Sources */,
+				F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */,
 				F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */,
 				F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */,
 				F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */,
