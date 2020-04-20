@@ -10,6 +10,9 @@
 		02C874156FB610306C98BDAD /* Pods_InstaStories.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93DE0D063D7C3E7B3DAC57B6 /* Pods_InstaStories.framework */; };
 		F111BA9F2444F82A001EAAF7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F111BA9E2444F82A001EAAF7 /* HomeViewModel.swift */; };
 		F12FEA532447CD5C0095BE24 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12FEA522447CD5C0095BE24 /* PhotoCell.swift */; };
+		F136F260244DDAE7004E570D /* ColorsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F136F25F244DDAE7004E570D /* ColorsCollectionView.swift */; };
+		F136F262244DDB09004E570D /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F136F261244DDB09004E570D /* ColorCell.swift */; };
+		F136F264244DF5C6004E570D /* ColorsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F136F263244DF5C6004E570D /* ColorsViewModel.swift */; };
 		F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EED82434E6CD00FA0B49 /* AppDelegate.swift */; };
 		F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */; };
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
@@ -29,6 +32,9 @@
 		B67CD3D2F780600E6DF881B1 /* Pods-InstaStories.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstaStories.release.xcconfig"; path = "Target Support Files/Pods-InstaStories/Pods-InstaStories.release.xcconfig"; sourceTree = "<group>"; };
 		F111BA9E2444F82A001EAAF7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F12FEA522447CD5C0095BE24 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		F136F25F244DDAE7004E570D /* ColorsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCollectionView.swift; sourceTree = "<group>"; };
+		F136F261244DDB09004E570D /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		F136F263244DF5C6004E570D /* ColorsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsViewModel.swift; sourceTree = "<group>"; };
 		F162EED52434E6CD00FA0B49 /* InstaStories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F162EED82434E6CD00FA0B49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +85,7 @@
 				F111BA9E2444F82A001EAAF7 /* HomeViewModel.swift */,
 				F1FA0CE424466E0C005D2801 /* PhotosViewModel.swift */,
 				F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */,
+				F136F263244DF5C6004E570D /* ColorsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -87,6 +94,8 @@
 			isa = PBXGroup;
 			children = (
 				F12FEA522447CD5C0095BE24 /* PhotoCell.swift */,
+				F136F25F244DDAE7004E570D /* ColorsCollectionView.swift */,
+				F136F261244DDB09004E570D /* ColorCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -258,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1FA0CE524466E0C005D2801 /* PhotosViewModel.swift in Sources */,
+				F136F260244DDAE7004E570D /* ColorsCollectionView.swift in Sources */,
 				F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */,
 				F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */,
 				F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */,
@@ -265,10 +275,12 @@
 				F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */,
 				F1BFD685244B659800513C9A /* PhotoView.swift in Sources */,
 				F1FA0CE324466AF5005D2801 /* UIViewController.swift in Sources */,
+				F136F262244DDB09004E570D /* ColorCell.swift in Sources */,
 				F12FEA532447CD5C0095BE24 /* PhotoCell.swift in Sources */,
 				F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */,
 				F111BA9F2444F82A001EAAF7 /* HomeViewModel.swift in Sources */,
 				F1FA0CE024466AC2005D2801 /* PhotosViewController.swift in Sources */,
+				F136F264244DF5C6004E570D /* ColorsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

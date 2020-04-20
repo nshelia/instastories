@@ -28,7 +28,6 @@ class PhotoCell: UICollectionViewCell {
 	func configure(viewModel: PhotoView) -> Void {
 		self.viewModel = viewModel
 		setupView()
-
 	}
 	
 	func setupView() {

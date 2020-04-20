@@ -17,6 +17,7 @@ final class EditorViewModel {
 	private var disposeBag = DisposeBag()
 	
 	var photoInView = PublishRelay<PhotoView>()
+	var mainViewIsHidden = PublishRelay<Bool>()
 	
 	func addItem(item: PhotoView) {
 		photoInView.accept(item)
