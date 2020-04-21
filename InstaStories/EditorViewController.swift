@@ -26,10 +26,18 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	var imageView: UIImageView!
 	
+	// BUTTONS
 	var closeButton: UIButton!
 	var drawButton: UIButton!
 	var saveButton: UIButton!
+	var doneButton: UIButton!
+	
+	// WRAPPER VIEWS
 	var bottomView: UIView!
+	var headerView: UIView!
+	
+	// COLLECTION VIEW WRAPPERS
+	var colorsCollectionView: UIView!
 	
 	let containerView: UIView =  {
 		let containerView = UIView()
@@ -114,9 +122,23 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 
 	func bindViews() {
-		viewModel.mainViewIsHidden.bind(to: closeButton.rx.isHidden).disposed(by: bag)
-		viewModel.mainViewIsHidden.bind(to: drawButton.rx.isHidden).disposed(by: bag)
-		
+		viewModel.mainViewIsHidden.subscribe(onNext: { [weak self] isHidden in
+			guard let self = self else { return }
+			if (isHidden) {
+				self.closeButton.isHidden = true
+				self.drawButton.removeFromSuperview()
+				self.saveButton.removeFromSuperview()
+			} else {
+				self.closeButton.isHidden = false
+				self.colorsCollectionView.removeFromSuperview()
+				self.addSaveButton()
+				self.addDrawButton()
+				self.doneButton.removeFromSuperview()
+				self.bottomView.yoga.justifyContent = .flexEnd
+			}
+			self.containerView.yoga.applyLayout(preservingOrigin: true)
+		}).disposed(by: bag)
+
 		viewModel.photoInView.asDriver(onErrorJustReturn: PhotoView.defaultImage())
 			.map({ $0.image})
 			.drive(imageView.rx.image).disposed(by: bag)
@@ -168,49 +190,78 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		gestureRecognizer.scale = 1;
 	}
 	
-	func addHeaderView() {
-		
-		let wrapperView = createWrapperView()
-		wrapperView.yoga.top = YGValue(self.topSafeAreaHeight)
-		containerView.addSubview(wrapperView)
+	func addCloseButton() {
 		closeButton = createHeaderButton(imageIdentifier: "close")
-		drawButton = createHeaderButton(imageIdentifier: "brush")
-		
-		drawButton.rx.tap.bind { [weak self ] _ in
-			guard let self = self else { return }
-			self.viewModel.mainViewIsHidden.accept(true)
-			self.addColorsCollectionView()
-
-		}.disposed(by: bag)
 		
 		closeButton.rx.tap.bind {
 			let transition: CATransition = CATransition()
 			transition.duration =	0.3
 			transition.type = CATransitionType.fade
 			self.navigationController?.view.layer.add(transition, forKey: nil)
-
+			
 			self.navigationController?.popViewController(animated: false)
 		}.disposed(by: bag)
 		
-		wrapperView.addSubview(closeButton)
-		wrapperView.addSubview(drawButton)
-
+		headerView.addSubview(closeButton)
+	}
+	
+	func addDrawButton() {
+		drawButton = createHeaderButton(imageIdentifier: "brush")
+		
+		drawButton.rx.tap.bind { [weak self ] _ in
+			guard let self = self else { return }
+			self.viewModel.mainViewIsHidden.accept(true)
+			self.showDrawingEditor()
+		}.disposed(by: bag)
+		
+		headerView.addSubview(drawButton)
+	}
+	
+	func addHeaderView() {
+		headerView = createWrapperView()
+		headerView.yoga.top = YGValue(self.topSafeAreaHeight)
+		containerView.addSubview(headerView)
+		addCloseButton()
+		addDrawButton()
 		self.view.bringSubviewToFront(containerView)
 	}
 	
 	func addColorsCollectionView() {
-		saveButton.removeFromSuperview()
 		bottomView.yoga.justifyContent = .center
-		let collectionView = ColorsCollectionView()
+		colorsCollectionView = ColorsCollectionView()
 		
-		collectionView.configureLayout { layout in
+		colorsCollectionView.configureLayout { layout in
 			layout.isEnabled = true
 			layout.width = YGValue(self.view.bounds.width)
 		}
-		bottomView.addSubview(collectionView)
+		bottomView.addSubview(colorsCollectionView)
+	}
+	
+	func showDrawingEditor() {
+		let doneButton = createDoneButton()
+		
+		self.addColorsCollectionView()
+		
+		headerView.addSubview(doneButton)
+		
+		doneButton.rx.tap.subscribe(onNext: { [weak self] in
+			self?.viewModel.mainViewIsHidden.accept(false)
+			}).disposed(by: bag)
 		containerView.yoga.applyLayout(preservingOrigin: true)
 
 	}
+	
+	func createDoneButton() -> UIButton {
+		doneButton = UIButton(type: .custom)
+		doneButton.setTitle("DONE", for: .normal)
+		doneButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
+		doneButton.configureLayout { (layout) in
+			layout.isEnabled = true
+		}
+		
+		return doneButton
+	}
+
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
@@ -225,9 +276,12 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		bottomView.yoga.bottom = YGValue(bottomSafeAreaHeight)
 		bottomView.yoga.justifyContent = .flexEnd
 		containerView.addSubview(bottomView)
+		addSaveButton()
+	}
+	
+	func addSaveButton() {
 		let saveButton = createSaveButton()
 		bottomView.addSubview(saveButton)
-		
 	}
 	
 	func createSaveButton() -> UIButton {

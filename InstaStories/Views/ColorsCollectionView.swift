@@ -41,6 +41,7 @@ class ColorsCollectionView : UIView {
 			layout.isEnabled = true
 			layout.height = 100
 		}
+		cv.backgroundColor = .clear
 		cv.delegate = self
 		cv.register(ColorCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
 		cv.yoga.applyLayout(preservingOrigin: true)
