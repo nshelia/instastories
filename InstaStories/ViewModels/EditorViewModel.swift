@@ -12,12 +12,19 @@ import RxCocoa
 import Photos
 
 
+
+enum EditorScene {
+	case main
+	case drawing
+}
+
+
 final class EditorViewModel {
 	
 	private var disposeBag = DisposeBag()
 	
 	var photoInView = PublishRelay<PhotoView>()
-	var mainViewIsHidden = PublishRelay<Bool>()
+	var visibleScene = BehaviorRelay<EditorScene>(value: .main)
 	
 	func addItem(item: PhotoView) {
 		photoInView.accept(item)
