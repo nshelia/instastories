@@ -15,13 +15,12 @@ import RxCocoa
 class ColorsCollectionView : UIView {
 	
 	let bag = DisposeBag()
-	
 	private var viewModel: ColorsViewModel  = {
 		return ColorsViewModel()
 	}()
 
 	let cellReuseIdentifier = "ColorCell"
-
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		addSubview(collectionView)
@@ -36,11 +35,13 @@ class ColorsCollectionView : UIView {
 	lazy var collectionView : UICollectionView = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
+		layout.minimumLineSpacing = Constants.collectionViewCellGutter
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
 		cv.configureLayout { layout in
 			layout.isEnabled = true
-			layout.height = 50
+			layout.height = YGValue(Constants.collectionViewCellWidth)
 		}
+		cv.showsHorizontalScrollIndicator = false
 		cv.backgroundColor = .clear
 		cv.delegate = self
 		cv.register(ColorCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
@@ -55,6 +56,7 @@ class ColorsCollectionView : UIView {
 				cell.configure(color: color)
 		}
 		.disposed(by: bag)
+	
 	}
 	
 }
@@ -65,8 +67,14 @@ extension ColorsCollectionView: UICollectionViewDelegateFlowLayout {
 		return viewModel.colors.value.count
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		viewModel.colors.accept(viewModel.colors.value.enumerated().map { (index,item) in
+			return Color(value: item.value, isActive: index == indexPath.row)
+		})
+	}
+	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-		return CGSize(width: 50, height: 50)
+		return CGSize(width: Constants.collectionViewCellWidth, height: Constants.collectionViewCellWidth)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfSections section: Int) -> Int {

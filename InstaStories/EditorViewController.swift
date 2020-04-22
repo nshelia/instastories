@@ -101,6 +101,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		bindViews()
 		addMainScene()
 		addDrawingScene()
+		addGestures()
 		
 		viewModel.addItem(item: initialImage)
 		viewModel.fetchOriginalImage(localIdentifier: initialImage.localIdentifier)

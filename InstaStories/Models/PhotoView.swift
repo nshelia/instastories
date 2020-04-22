@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 struct PhotoView {
 	let localIdentifier: String
 	let image: UIImage
