@@ -32,24 +32,34 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var saveButton: UIButton!
 	var doneButton: UIButton!
 	
-	// WRAPPER VIEWS
-	var bottomView: UIView!
-	var headerView: UIView!
-	
 	// COLLECTION VIEW WRAPPERS
 	var colorsCollectionView: UIView!
 	
-	let containerView: UIView =  {
-		let containerView = UIView()
+	let mainScene: UIView =  {
+		let view = UIView()
 		
-		containerView.configureLayout { (layout) in
+		view.configureLayout { (layout) in
 			layout.isEnabled = true
 			layout.paddingHorizontal = 0
 			layout.justifyContent = .spaceBetween
 			layout.flexDirection = .column
 		}
 				
-		return containerView
+		return view
+	}()
+	
+	let drawingScene: UIView =  {
+		let view = UIView()
+		
+		view.configureLayout { (layout) in
+			layout.isEnabled = true
+			layout.paddingHorizontal = 0
+			layout.justifyContent = .spaceBetween
+			layout.flexDirection = .column
+		}
+		view.isHidden = true
+		
+		return view
 	}()
 	
 	init(viewModel: EditorViewModel, initialImage: PhotoView) {
@@ -71,30 +81,83 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		self.navigationItem.title = "Photo Editor"
 		self.navigationController?.navigationBar.isHidden = true
 		
-		containerView.yoga.width = YGValue(self.view.bounds.size.width)
-		containerView.yoga.height =  YGValue(self.view.bounds.size.height)
+		mainScene.yoga.width = YGValue(self.view.bounds.size.width)
+		mainScene.yoga.height =  YGValue(self.view.bounds.size.height)
 
-		self.view.addSubview(containerView)
+		drawingScene.yoga.width = YGValue(self.view.bounds.size.width)
+		drawingScene.yoga.height =  YGValue(self.view.bounds.size.height)
+		
+		self.view.addSubview(mainScene)
+		self.view.addSubview(drawingScene)
+		
 		if #available(iOS 11.0, *) {
 			let window = UIApplication.shared.windows[0]
 			let safeFrame = window.safeAreaLayoutGuide.layoutFrame
 			topSafeAreaHeight = safeFrame.minY
 			bottomSafeAreaHeight = window.frame.maxY - safeFrame.maxY
 		}
-		setupView()
+		
+		setupImageView()
 		bindViews()
-		addGestures()
+		addMainScene()
+		addDrawingScene()
 		
 		viewModel.addItem(item: initialImage)
 		viewModel.fetchOriginalImage(localIdentifier: initialImage.localIdentifier)
 
 	}
 	
-	func setupView() {
-		setupImageView()
-		addHeaderView()
-		addBottomView()
-		containerView.yoga.applyLayout(preservingOrigin: true)
+	func addMainScene() {
+		let topView = createWrapperView(topArea: true)
+		topView.yoga.justifyContent = .spaceBetween
+		let closeButton = createCloseButton()
+		topView.addSubview(closeButton)
+		let drawButton = createDrawButton()
+		topView.addSubview(drawButton)
+		
+		mainScene.addSubview(topView)
+		
+		let bottomView = createWrapperView(bottomArea: true)
+		bottomView.yoga.justifyContent = .flexEnd
+		let saveButton = createSaveButton()
+		bottomView.addSubview(saveButton)
+		
+		mainScene.addSubview(bottomView)
+		
+		mainScene.yoga.applyLayout(preservingOrigin: true)
+
+		self.view.bringSubviewToFront(mainScene)
+
+	}
+	
+	func addDrawingScene() {
+		let topView = createWrapperView(topArea: true)
+		topView.yoga.justifyContent = .flexEnd
+
+		let doneButton = createDoneButton()
+		topView.addSubview(doneButton)
+		
+		doneButton.rx.tap.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.main)
+		}).disposed(by: bag)
+		
+		let bottomView = createWrapperView(bottomArea: true)
+		bottomView.yoga.justifyContent = .center
+
+		colorsCollectionView = ColorsCollectionView()
+		
+		colorsCollectionView.configureLayout { layout in
+			layout.isEnabled = true
+			layout.width = YGValue(self.view.bounds.width)
+		}
+		
+		drawingScene.addSubview(topView)
+		bottomView.addSubview(colorsCollectionView)
+		drawingScene.addSubview(bottomView)
+
+		drawingScene.yoga.applyLayout(preservingOrigin: true)
+		
+		self.view.bringSubviewToFront(drawingScene)
 
 	}
 	
@@ -122,23 +185,19 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 
 	func bindViews() {
-		viewModel.mainViewIsHidden.subscribe(onNext: { [weak self] isHidden in
-			guard let self = self else { return }
-			if (isHidden) {
-				self.closeButton.isHidden = true
-				self.drawButton.removeFromSuperview()
-				self.saveButton.removeFromSuperview()
-			} else {
-				self.closeButton.isHidden = false
-				self.colorsCollectionView.removeFromSuperview()
-				self.addSaveButton()
-				self.addDrawButton()
-				self.doneButton.removeFromSuperview()
-				self.bottomView.yoga.justifyContent = .flexEnd
+		viewModel.visibleScene.subscribe(onNext: { currentScene in
+			
+			switch currentScene {
+				case .main:
+					self.mainScene.isHidden = false
+					self.drawingScene.isHidden = true
+				case .drawing:
+					self.mainScene.isHidden = true
+					self.drawingScene.isHidden = false
 			}
-			self.containerView.yoga.applyLayout(preservingOrigin: true)
+			
 		}).disposed(by: bag)
-
+		
 		viewModel.photoInView.asDriver(onErrorJustReturn: PhotoView.defaultImage())
 			.map({ $0.image})
 			.drive(imageView.rx.image).disposed(by: bag)
@@ -190,7 +249,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		gestureRecognizer.scale = 1;
 	}
 	
-	func addCloseButton() {
+	func createCloseButton() -> UIButton {
 		closeButton = createHeaderButton(imageIdentifier: "close")
 		
 		closeButton.rx.tap.bind {
@@ -202,53 +261,18 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			self.navigationController?.popViewController(animated: false)
 		}.disposed(by: bag)
 		
-		headerView.addSubview(closeButton)
+		return closeButton
 	}
 	
-	func addDrawButton() {
+	func createDrawButton() -> UIButton {
 		drawButton = createHeaderButton(imageIdentifier: "brush")
 		
 		drawButton.rx.tap.bind { [weak self ] _ in
 			guard let self = self else { return }
-			self.viewModel.mainViewIsHidden.accept(true)
-			self.showDrawingEditor()
+			self.viewModel.visibleScene.accept(.drawing)
 		}.disposed(by: bag)
 		
-		headerView.addSubview(drawButton)
-	}
-	
-	func addHeaderView() {
-		headerView = createWrapperView()
-		headerView.yoga.top = YGValue(self.topSafeAreaHeight)
-		containerView.addSubview(headerView)
-		addCloseButton()
-		addDrawButton()
-		self.view.bringSubviewToFront(containerView)
-	}
-	
-	func addColorsCollectionView() {
-		bottomView.yoga.justifyContent = .center
-		colorsCollectionView = ColorsCollectionView()
-		
-		colorsCollectionView.configureLayout { layout in
-			layout.isEnabled = true
-			layout.width = YGValue(self.view.bounds.width)
-		}
-		bottomView.addSubview(colorsCollectionView)
-	}
-	
-	func showDrawingEditor() {
-		let doneButton = createDoneButton()
-		
-		self.addColorsCollectionView()
-		
-		headerView.addSubview(doneButton)
-		
-		doneButton.rx.tap.subscribe(onNext: { [weak self] in
-			self?.viewModel.mainViewIsHidden.accept(false)
-			}).disposed(by: bag)
-		containerView.yoga.applyLayout(preservingOrigin: true)
-
+		return drawButton
 	}
 	
 	func createDoneButton() -> UIButton {
@@ -259,29 +283,20 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			layout.isEnabled = true
 		}
 		
+		doneButton.rx.tap.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.main)
+		}).disposed(by: bag)
+		
 		return doneButton
 	}
 
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		print("Layout subviews called")
-		print(bottomView.yoga.numberOfChildren)
-		print(bottomView.subviews)
-		containerView.yoga.applyLayout(preservingOrigin: true)
-	}
-	
-	func addBottomView() {
-		bottomView = createWrapperView()
-		bottomView.yoga.bottom = YGValue(bottomSafeAreaHeight)
-		bottomView.yoga.justifyContent = .flexEnd
-		containerView.addSubview(bottomView)
-		addSaveButton()
-	}
-	
-	func addSaveButton() {
-		let saveButton = createSaveButton()
-		bottomView.addSubview(saveButton)
+
+		mainScene.yoga.applyLayout(preservingOrigin: true)
+		drawingScene.yoga.applyLayout(preservingOrigin: true)
+
 	}
 	
 	func createSaveButton() -> UIButton {
@@ -320,16 +335,17 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 	}
 	
-	func createWrapperView()  -> UIView{
+	func createWrapperView(topArea: Bool = false,bottomArea: Bool = false)  -> UIView{
 		let wrapperView = UIView()
 		
 		wrapperView.configureLayout { (layout) in
 			layout.isEnabled = true
 			layout.width = YGValue(self.view.bounds.size.width)
 			layout.paddingHorizontal = 20
-			layout.justifyContent = .spaceBetween
 			layout.flexDirection = .row
 			layout.minHeight = 20
+			layout.top = topArea ? YGValue(self.topSafeAreaHeight) : 0
+			layout.paddingBottom = bottomArea ? YGValue(self.bottomSafeAreaHeight) : 0
 		}
 		
 		return wrapperView

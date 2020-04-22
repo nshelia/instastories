@@ -39,7 +39,7 @@ class ColorsCollectionView : UIView {
 		let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
 		cv.configureLayout { layout in
 			layout.isEnabled = true
-			layout.height = 100
+			layout.height = 50
 		}
 		cv.backgroundColor = .clear
 		cv.delegate = self
