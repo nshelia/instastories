@@ -1,36 +1,40 @@
 //
-//  ColorsCollectionView.swift
+//  ColorsCollectionViewController.swift
 //  InstaStories
 //
-//  Created by Nika Shelia on 20.04.20.
+//  Created by Nika Shelia on 23.04.20.
 //  Copyright © 2020 Nika Shelia. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import YogaKit
 import RxSwift
 import RxCocoa
+import YogaKit
 
-class ColorsCollectionView : UIView {
+class ColorsCollectionViewController: UIViewController {
 	
 	let bag = DisposeBag()
-	
-	public let viewModel: ColorsViewModel  = {
-		return ColorsViewModel()
-	}()
 
-	let cellReuseIdentifier = "ColorCell"
+	private let viewModel: ColorsViewModel!
+
+	override func viewDidLoad() {
+			super.viewDidLoad()
+
+	}
 	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-		addSubview(collectionView)
+	let cellReuseIdentifier = "ColorCell"
+
+	
+	init(viewModel: ColorsViewModel) {
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
+		self.view.addSubview(collectionView)
 		bindViews()
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		
+	
+	required init?(coder: NSCoder) {
+		fatalError("App crashed")
 	}
 	
 	
@@ -58,12 +62,12 @@ class ColorsCollectionView : UIView {
 				cell.configure(color: color)
 		}
 		.disposed(by: bag)
-	
+		
 	}
-	
+
 }
 
-extension ColorsCollectionView: UICollectionViewDelegateFlowLayout {
+extension ColorsCollectionViewController: UICollectionViewDelegateFlowLayout {
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return viewModel.colors.value.count

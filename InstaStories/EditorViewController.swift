@@ -26,14 +26,25 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	var imageView: UIImageView!
 	
+	// CHILD CONTROLLERS
+	
+	var colorsCollectionViewController: ColorsCollectionViewController!
+	
+	// GESTURES
+	let pinchGesture = UIPinchGestureRecognizer()
+	let continiousGesture = TouchCaptureGesture(coder: NSCoder())
+	let panGesture = UIPanGestureRecognizer()
+	let rotationGesture = UIRotationGestureRecognizer()
+	
 	// BUTTONS
 	var closeButton: UIButton!
 	var drawButton: UIButton!
 	var saveButton: UIButton!
 	var doneButton: UIButton!
 	
-	// COLLECTION VIEW WRAPPERS
-	var colorsCollectionView: UIView!
+	// DRAWING PAPER
+	
+	var currentDrawingColor: UIColor = Constants.colors.first!
 	
 	let mainScene: UIView =  {
 		let view = UIView()
@@ -44,6 +55,9 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			layout.justifyContent = .spaceBetween
 			layout.flexDirection = .column
 		}
+		
+		view.accessibilityIdentifier = "MainScene"
+
 				
 		return view
 	}()
@@ -57,7 +71,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			layout.justifyContent = .spaceBetween
 			layout.flexDirection = .column
 		}
-		view.isHidden = true
+		
+		view.accessibilityIdentifier = "DrawingScene"
 		
 		return view
 	}()
@@ -74,7 +89,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	}
 	
 	override func viewDidLoad() {
-		
 		super.viewDidLoad()
 		self.view.backgroundColor = .black
 		
@@ -87,6 +101,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		drawingScene.yoga.width = YGValue(self.view.bounds.size.width)
 		drawingScene.yoga.height =  YGValue(self.view.bounds.size.height)
 		
+	
 		self.view.addSubview(mainScene)
 		self.view.addSubview(drawingScene)
 		
@@ -126,14 +141,12 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		mainScene.addSubview(bottomView)
 		
 		mainScene.yoga.applyLayout(preservingOrigin: true)
-
-		self.view.bringSubviewToFront(mainScene)
-
 	}
 	
 	func addDrawingScene() {
 		let topView = createWrapperView(topArea: true)
 		topView.yoga.justifyContent = .flexEnd
+		topView.tag = 102
 
 		let doneButton = createDoneButton()
 		topView.addSubview(doneButton)
@@ -144,25 +157,52 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		let bottomView = createWrapperView(bottomArea: true)
 		bottomView.yoga.justifyContent = .center
-
-		colorsCollectionView = ColorsCollectionView()
+		bottomView.tag = 101
 		
-		colorsCollectionView.configureLayout { layout in
+		let viewModel = ColorsViewModel()
+		
+		colorsCollectionViewController = ColorsCollectionViewController(viewModel: viewModel)
+		colorsCollectionViewController.view.isHidden = true
+
+		colorsCollectionViewController.view.configureLayout { layout in
 			layout.isEnabled = true
 			layout.width = YGValue(self.view.bounds.width)
 		}
 		
+		viewModel.colors.map { $0.first{ $0.isActive} }.subscribe(onNext: { activeColor in
+			self.currentDrawingColor = activeColor!.value
+		}).disposed(by: bag)
+		
+		colorsCollectionViewController.view.frame = bottomView.bounds;
+		colorsCollectionViewController.willMove(toParent: self)
+		bottomView.addSubview(colorsCollectionViewController.view)
+		colorsCollectionViewController.didMove(toParent: self)
+		self.addChild(colorsCollectionViewController)
+		
 		drawingScene.addSubview(topView)
-		bottomView.addSubview(colorsCollectionView)
 		drawingScene.addSubview(bottomView)
 
 		drawingScene.yoga.applyLayout(preservingOrigin: true)
 		
-		self.view.bringSubviewToFront(drawingScene)
 
 	}
 	
 	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+		return true
+	}
+	
+	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		let view = gestureRecognizer.view
+		let loc = gestureRecognizer.location(in: view)
+		let subview = view?.hitTest(loc, with: nil)
+		
+		let bottomView = self.view.viewWithTag(101)
+		let topView = self.view.viewWithTag(102)
+		
+		if subview!.isDescendant(of: bottomView!) || subview!.isDescendant(of: topView!) {
+			return false
+		}
+		
 		return true
 	}
 	
@@ -171,7 +211,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		imageView.contentMode = .scaleAspectFit
 		imageView.isUserInteractionEnabled = true
 		imageView.isMultipleTouchEnabled = true
-		
 		self.view.addSubview(imageView)
 		
 		imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,16 +226,30 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 	func bindViews() {
 		viewModel.visibleScene.subscribe(onNext: { currentScene in
-			
 			switch currentScene {
 				case .main:
+					self.view.bringSubviewToFront(self.mainScene)
+
 					self.mainScene.isHidden = false
-					self.drawingScene.isHidden = true
+					self.doneButton?.isHidden = true
+					self.continiousGesture?.isEnabled = false
+					self.pinchGesture.isEnabled = true
+					self.panGesture.isEnabled = true
+					self.rotationGesture.isEnabled = true
+					self.colorsCollectionViewController?.view?.isHidden = true
+
 				case .drawing:
+					self.view.bringSubviewToFront(self.drawingScene)
+
 					self.mainScene.isHidden = true
-					self.drawingScene.isHidden = false
+					self.continiousGesture?.isEnabled = true
+					self.pinchGesture.isEnabled = false
+					self.panGesture.isEnabled = false
+					self.rotationGesture.isEnabled = false
+					self.doneButton?.isHidden = false
+					self.colorsCollectionViewController?.view?.isHidden = false
+
 			}
-			
 		}).disposed(by: bag)
 		
 		viewModel.photoInView.asDriver(onErrorJustReturn: PhotoView.defaultImage())
@@ -205,23 +258,54 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	}
 	
 	func addGestures() {
-		let pinchGesture = UIPinchGestureRecognizer()
+
+		continiousGesture?.addTarget(self, action: #selector(self.swiper))
 		pinchGesture.addTarget(self, action: #selector(handleScale))
-		
-		let rotationGesture = UIRotationGestureRecognizer()
 		rotationGesture.addTarget(self, action: #selector(handleRotate))
-		
-		let panGesture = UIPanGestureRecognizer()
 		panGesture.addTarget(self, action: #selector(handlePan))
-		
+
 		rotationGesture.delegate = self
 		pinchGesture.delegate = self
 		panGesture.delegate = self
-		
+		continiousGesture?.delegate = self
+
 		self.view.addGestureRecognizer(rotationGesture)
 		self.view.addGestureRecognizer(pinchGesture)
 		self.view.addGestureRecognizer(panGesture)
+		drawingScene.addGestureRecognizer(continiousGesture!)
+
+	}
+	
+	func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
+		let path = UIBezierPath()
+		path.move(to: fromPoint)
+		path.addLine(to: toPoint)
 		
+		let shapeLayer = CAShapeLayer()
+		shapeLayer.path = path.cgPath
+		shapeLayer.strokeColor = currentDrawingColor.cgColor
+		shapeLayer.lineWidth = 5
+		
+		drawingScene.layer.addSublayer(shapeLayer)
+	}
+	
+	@objc func swiper(_ gestureRecognizer: TouchCaptureGesture) {
+
+		if gestureRecognizer.state == .began {
+			doneButton.isHidden = true
+			colorsCollectionViewController.view.isHidden = true
+		}
+		
+		if gestureRecognizer.state == .ended {
+			doneButton.isHidden = false
+			colorsCollectionViewController.view.isHidden = false
+		}
+		
+		if (gestureRecognizer.samples.count > 1) {
+			let firstPoint = gestureRecognizer.samples[gestureRecognizer.samples.count - 2].location
+			let secondPoint = gestureRecognizer.samples.last!.location
+			drawLine(from: firstPoint, to: secondPoint)
+		}
 	}
 	
 	
@@ -283,6 +367,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		doneButton.configureLayout { (layout) in
 			layout.isEnabled = true
 		}
+		doneButton.isHidden = true
 		
 		doneButton.rx.tap.subscribe(onNext: { [weak self] in
 			self?.viewModel.visibleScene.accept(.main)
