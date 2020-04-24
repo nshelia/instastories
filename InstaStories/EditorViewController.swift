@@ -41,9 +41,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var drawButton: UIButton!
 	var saveButton: UIButton!
 	var doneButton: UIButton!
-	
-	// DRAWING PAPER
-	
+		
 	var currentDrawingColor: UIColor = Constants.colors.first!
 	
 	let mainScene: UIView =  {
@@ -77,6 +75,19 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		return view
 	}()
 	
+	let drawingPaper: UIView = {
+		let view = UIView()
+		
+		view.configureLayout { (layout) in
+			layout.isEnabled = true
+
+		}
+		
+		view.accessibilityIdentifier = "DrawingPaper"
+		
+		return view
+	}()
+	
 	init(viewModel: EditorViewModel, initialImage: PhotoView) {
 		self.viewModel = viewModel
 		self.initialImage = initialImage
@@ -97,11 +108,13 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		mainScene.yoga.width = YGValue(self.view.bounds.size.width)
 		mainScene.yoga.height =  YGValue(self.view.bounds.size.height)
-
 		drawingScene.yoga.width = YGValue(self.view.bounds.size.width)
 		drawingScene.yoga.height =  YGValue(self.view.bounds.size.height)
+
+		drawingPaper.yoga.width = YGValue(self.view.bounds.size.width)
+		drawingPaper.yoga.height = YGValue(self.view.bounds.size.height)
 		
-	
+		self.view.addSubview(drawingPaper)
 		self.view.addSubview(mainScene)
 		self.view.addSubview(drawingScene)
 		
@@ -162,7 +175,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		let viewModel = ColorsViewModel()
 		
 		colorsCollectionViewController = ColorsCollectionViewController(viewModel: viewModel)
-		colorsCollectionViewController.view.isHidden = true
 
 		colorsCollectionViewController.view.configureLayout { layout in
 			layout.isEnabled = true
@@ -183,8 +195,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		drawingScene.addSubview(bottomView)
 
 		drawingScene.yoga.applyLayout(preservingOrigin: true)
-		
-
 	}
 	
 	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -211,7 +221,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		imageView.contentMode = .scaleAspectFit
 		imageView.isUserInteractionEnabled = true
 		imageView.isMultipleTouchEnabled = true
-		self.view.addSubview(imageView)
+		imageView.backgroundColor = .clear
+		drawingPaper.addSubview(imageView)
 		
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -228,26 +239,21 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		viewModel.visibleScene.subscribe(onNext: { currentScene in
 			switch currentScene {
 				case .main:
-					self.view.bringSubviewToFront(self.mainScene)
 
 					self.mainScene.isHidden = false
-					self.doneButton?.isHidden = true
+					self.drawingScene.isHidden = true
 					self.continiousGesture?.isEnabled = false
 					self.pinchGesture.isEnabled = true
 					self.panGesture.isEnabled = true
 					self.rotationGesture.isEnabled = true
-					self.colorsCollectionViewController?.view?.isHidden = true
 
 				case .drawing:
-					self.view.bringSubviewToFront(self.drawingScene)
-
+					self.drawingScene.isHidden = false
 					self.mainScene.isHidden = true
 					self.continiousGesture?.isEnabled = true
 					self.pinchGesture.isEnabled = false
 					self.panGesture.isEnabled = false
 					self.rotationGesture.isEnabled = false
-					self.doneButton?.isHidden = false
-					self.colorsCollectionViewController?.view?.isHidden = false
 
 			}
 		}).disposed(by: bag)
@@ -286,7 +292,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		shapeLayer.strokeColor = currentDrawingColor.cgColor
 		shapeLayer.lineWidth = 5
 		
-		drawingScene.layer.addSublayer(shapeLayer)
+		drawingPaper.layer.addSublayer(shapeLayer)
 	}
 	
 	@objc func swiper(_ gestureRecognizer: TouchCaptureGesture) {
@@ -367,7 +373,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		doneButton.configureLayout { (layout) in
 			layout.isEnabled = true
 		}
-		doneButton.isHidden = true
 		
 		doneButton.rx.tap.subscribe(onNext: { [weak self] in
 			self?.viewModel.visibleScene.accept(.main)
@@ -382,6 +387,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 		mainScene.yoga.applyLayout(preservingOrigin: true)
 		drawingScene.yoga.applyLayout(preservingOrigin: true)
+		drawingPaper.yoga.applyLayout(preservingOrigin: true)
 
 	}
 	
