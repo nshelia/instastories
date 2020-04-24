@@ -16,6 +16,7 @@ import Photos
 enum EditorScene {
 	case main
 	case drawing
+	case addingTextField
 }
 
 

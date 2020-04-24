@@ -38,7 +38,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	// BUTTONS
 	var closeButton: UIButton!
-	var drawButton: UIButton!
 	var saveButton: UIButton!
 	var doneButton: UIButton!
 		
@@ -136,14 +135,41 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 	}
 	
+	// MARK: Main Scene
+	
 	func addMainScene() {
 		let topView = createWrapperView(topArea: true)
 		topView.yoga.justifyContent = .spaceBetween
 		let closeButton = createCloseButton()
 		topView.addSubview(closeButton)
-		let drawButton = createDrawButton()
-		topView.addSubview(drawButton)
+		let drawingActionsView = UIView()
+		drawingActionsView.configureLayout { layout in
+			layout.isEnabled = true
+			layout.alignItems = .center
+			layout.flexDirection = .row
+			layout.justifyContent = .center
+			
+		}
 		
+		topView.addSubview(drawingActionsView)
+		
+		let brushButton = createDrawButton(imageIdentifier: "brush")
+		
+		brushButton.rx.tap.bind { [weak self ] _ in
+			guard let self = self else { return }
+			self.viewModel.visibleScene.accept(.drawing)
+		}.disposed(by: bag)
+		
+		let textFieldButton = createDrawButton(imageIdentifier: "textField")
+		
+		textFieldButton.rx.tap.bind { [weak self ] _ in
+			guard let self = self else { return }
+			self.viewModel.visibleScene.accept(.addingTextField)
+		}.disposed(by: bag)
+		
+		drawingActionsView.addSubview(textFieldButton)
+		drawingActionsView.addSubview(brushButton)
+
 		mainScene.addSubview(topView)
 		
 		let bottomView = createWrapperView(bottomArea: true)
@@ -155,6 +181,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		mainScene.yoga.applyLayout(preservingOrigin: true)
 	}
+	
+	// MARK: Drawing Scene
 	
 	func addDrawingScene() {
 		let topView = createWrapperView(topArea: true)
@@ -216,6 +244,9 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		return true
 	}
 	
+	// MARK: Seleted Image
+
+	
 	func setupImageView() {
 		imageView = UIImageView()
 		imageView.contentMode = .scaleAspectFit
@@ -254,6 +285,13 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 					self.pinchGesture.isEnabled = false
 					self.panGesture.isEnabled = false
 					self.rotationGesture.isEnabled = false
+				
+			case .addingTextField:
+				self.drawingScene.isHidden = false
+				self.mainScene.isHidden = true
+				self.pinchGesture.isEnabled = false
+				self.panGesture.isEnabled = false
+				self.rotationGesture.isEnabled = false
 
 			}
 		}).disposed(by: bag)
@@ -355,13 +393,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		return closeButton
 	}
 	
-	func createDrawButton() -> UIButton {
-		drawButton = createHeaderButton(imageIdentifier: "brush")
-		
-		drawButton.rx.tap.bind { [weak self ] _ in
-			guard let self = self else { return }
-			self.viewModel.visibleScene.accept(.drawing)
-		}.disposed(by: bag)
+	func createDrawButton(imageIdentifier: String) -> UIButton {
+		let drawButton = createHeaderButton(imageIdentifier: imageIdentifier)
 		
 		return drawButton
 	}
