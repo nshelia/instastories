@@ -8,10 +8,18 @@
 
 import Foundation
 import UIKit
+
+let window = UIApplication.shared.windows[0]
+let safeFrame = window.safeAreaLayoutGuide.layoutFrame
+
 struct Constants {
+	
+	static var topSafeAreaHeight: CGFloat = safeFrame.minY
+
+	static var bottomSafeAreaHeight: CGFloat = window.frame.maxY - safeFrame.maxY
+	
 	static let fadeTransitionDuration: Double = 0.3
 	
-		
 	static let collectionViewCellWidth: CGFloat = round(UIScreen.main.bounds.width / 18)
 	
 	static let collectionViewCellGutter: CGFloat = 10

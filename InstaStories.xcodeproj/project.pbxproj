@@ -12,11 +12,20 @@
 		F12FEA532447CD5C0095BE24 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12FEA522447CD5C0095BE24 /* PhotoCell.swift */; };
 		F136F262244DDB09004E570D /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F136F261244DDB09004E570D /* ColorCell.swift */; };
 		F136F264244DF5C6004E570D /* ColorsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F136F263244DF5C6004E570D /* ColorsViewModel.swift */; };
+		F13F9FFE24570F1C000E4C2D /* SceneNavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F9FFD24570F1C000E4C2D /* SceneNavigatorView.swift */; };
+		F13FA00024570FB1000E4C2D /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13F9FFF24570FB1000E4C2D /* Double.swift */; };
+		F13FA00424571D3A000E4C2D /* SceneNavigatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00324571D3A000E4C2D /* SceneNavigatorViewModel.swift */; };
+		F13FA00624572C53000E4C2D /* SaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00524572C53000E4C2D /* SaveView.swift */; };
+		F13FA008245733C1000E4C2D /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA007245733C1000E4C2D /* CompletionView.swift */; };
+		F13FA00A24573412000E4C2D /* CompletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00924573412000E4C2D /* CompletionViewModel.swift */; };
+		F13FA00C24573FE8000E4C2D /* EditorViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */; };
 		F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EED82434E6CD00FA0B49 /* AppDelegate.swift */; };
 		F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */; };
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
 		F162EEE22434E6D200FA0B49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F162EEE12434E6D200FA0B49 /* Assets.xcassets */; };
 		F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19ABF40244C9B2C005C8ED9 /* Constants.swift */; };
+		F1B3F01F2455BB10001F419C /* TouchStateCaptureGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */; };
+		F1B3F0212455CEC7001F419C /* CanvasItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B3F0202455CEC7001F419C /* CanvasItem.swift */; };
 		F1BFD685244B659800513C9A /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BFD684244B659800513C9A /* PhotoView.swift */; };
 		F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */; };
 		F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */; };
@@ -35,6 +44,13 @@
 		F12FEA522447CD5C0095BE24 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		F136F261244DDB09004E570D /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		F136F263244DF5C6004E570D /* ColorsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsViewModel.swift; sourceTree = "<group>"; };
+		F13F9FFD24570F1C000E4C2D /* SceneNavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneNavigatorView.swift; sourceTree = "<group>"; };
+		F13F9FFF24570FB1000E4C2D /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		F13FA00324571D3A000E4C2D /* SceneNavigatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneNavigatorViewModel.swift; sourceTree = "<group>"; };
+		F13FA00524572C53000E4C2D /* SaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveView.swift; sourceTree = "<group>"; };
+		F13FA007245733C1000E4C2D /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
+		F13FA00924573412000E4C2D /* CompletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionViewModel.swift; sourceTree = "<group>"; };
+		F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Gestures.swift"; sourceTree = "<group>"; };
 		F162EED52434E6CD00FA0B49 /* InstaStories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F162EED82434E6CD00FA0B49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +58,8 @@
 		F162EEE12434E6D200FA0B49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F162EEE62434E6D200FA0B49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F19ABF40244C9B2C005C8ED9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchStateCaptureGesture.swift; sourceTree = "<group>"; };
+		F1B3F0202455CEC7001F419C /* CanvasItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasItem.swift; sourceTree = "<group>"; };
 		F1BFD684244B659800513C9A /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
 		F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +106,8 @@
 				F1FA0CE424466E0C005D2801 /* PhotosViewModel.swift */,
 				F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */,
 				F136F263244DF5C6004E570D /* ColorsViewModel.swift */,
+				F13FA00324571D3A000E4C2D /* SceneNavigatorViewModel.swift */,
+				F13FA00924573412000E4C2D /* CompletionViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -97,6 +117,9 @@
 			children = (
 				F12FEA522447CD5C0095BE24 /* PhotoCell.swift */,
 				F136F261244DDB09004E570D /* ColorCell.swift */,
+				F13F9FFD24570F1C000E4C2D /* SceneNavigatorView.swift */,
+				F13FA00524572C53000E4C2D /* SaveView.swift */,
+				F13FA007245733C1000E4C2D /* CompletionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,6 +159,8 @@
 				F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */,
 				F1C7BD472451C11200E0C638 /* TouchCaptureGesture.swift */,
 				F1C7BD492451F3B000E0C638 /* ColorsCollectionViewController.swift */,
+				F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */,
+				F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */,
 			);
 			path = InstaStories;
 			sourceTree = "<group>";
@@ -144,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				F1BFD684244B659800513C9A /* PhotoView.swift */,
+				F1B3F0202455CEC7001F419C /* CanvasItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -152,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				F1FA0CE224466AF5005D2801 /* UIViewController.swift */,
+				F13F9FFF24570FB1000E4C2D /* Double.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -273,18 +300,27 @@
 				F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */,
 				F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */,
 				F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */,
+				F13FA00C24573FE8000E4C2D /* EditorViewController+Gestures.swift in Sources */,
 				F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */,
+				F1B3F01F2455BB10001F419C /* TouchStateCaptureGesture.swift in Sources */,
 				F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */,
 				F1BFD685244B659800513C9A /* PhotoView.swift in Sources */,
 				F1FA0CE324466AF5005D2801 /* UIViewController.swift in Sources */,
 				F136F262244DDB09004E570D /* ColorCell.swift in Sources */,
+				F13F9FFE24570F1C000E4C2D /* SceneNavigatorView.swift in Sources */,
+				F1B3F0212455CEC7001F419C /* CanvasItem.swift in Sources */,
 				F1C7BD4A2451F3B000E0C638 /* ColorsCollectionViewController.swift in Sources */,
 				F1C7BD482451C11200E0C638 /* TouchCaptureGesture.swift in Sources */,
 				F12FEA532447CD5C0095BE24 /* PhotoCell.swift in Sources */,
+				F13FA00624572C53000E4C2D /* SaveView.swift in Sources */,
 				F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */,
+				F13FA00424571D3A000E4C2D /* SceneNavigatorViewModel.swift in Sources */,
+				F13FA00A24573412000E4C2D /* CompletionViewModel.swift in Sources */,
 				F111BA9F2444F82A001EAAF7 /* HomeViewModel.swift in Sources */,
 				F1FA0CE024466AC2005D2801 /* PhotosViewController.swift in Sources */,
+				F13FA00024570FB1000E4C2D /* Double.swift in Sources */,
 				F136F264244DF5C6004E570D /* ColorsViewModel.swift in Sources */,
+				F13FA008245733C1000E4C2D /* CompletionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

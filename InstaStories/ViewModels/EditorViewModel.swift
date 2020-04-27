@@ -26,11 +26,13 @@ final class EditorViewModel {
 	
 	var photoInView = PublishRelay<PhotoView>()
 	var visibleScene = BehaviorRelay<EditorScene>(value: .main)
+	var visibleCanvasItems = PublishRelay<CanvasItem>()
 	
 	func addItem(item: PhotoView) {
 		photoInView.accept(item)
 	}
 	
+
 	private lazy var imageManager = PHCachingImageManager()
 	
 	func fetchOriginalImage(localIdentifier: String) {
