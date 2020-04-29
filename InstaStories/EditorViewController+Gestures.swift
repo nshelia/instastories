@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 extension EditorViewController {
+	typealias ClosestView = UIView & CanvasItemViewProtocol
+	
 	func drawLine(from fromPoint: CGPoint, to toPoint: CGPoint) {
 		let path = UIBezierPath()
 		path.move(to: fromPoint)
@@ -21,6 +23,56 @@ extension EditorViewController {
 		shapeLayer.lineWidth = 5
 		
 		drawingPaper.layer.addSublayer(shapeLayer)
+	}
+	
+	private func getClosetView(for gesture: UIGestureRecognizer) -> ClosestView? {
+		if (gesture.state == .ended) {
+			gestureShadowView.transform = .identity
+			gestureShadowView.removeFromSuperview()
+			currentlyMoving = nil
+			return nil
+		}
+
+		guard let gestureView = gesture.view else { return nil }
+		if (gesture.state == .began) {
+
+			var frame = CGRect.zero
+			if gesture.numberOfTouches > 1 {
+				let touchOne = gesture.location(ofTouch: 0, in: drawingPaper)
+				let touchTwo = gesture.location(ofTouch: 1, in: drawingPaper)
+				let topPoint = touchOne.y > touchTwo.y ? touchOne : touchTwo
+				let bottomPoint = touchOne.y < touchTwo.y ? touchOne : touchTwo
+				frame = CGRect.init(p1: bottomPoint, p2: topPoint)
+			} else {
+				let location = gesture.location(in: drawingPaper)
+				frame = CGRect(center: location, size: CGSize(width: 50.0, height: 50.0))
+			}
+			gestureShadowView.frame = frame
+			gestureView.addSubview(gestureShadowView)
+			gestureView.bringSubviewToFront(gestureShadowView)
+			
+			for subview in gestureView.subviews {
+				guard let view = subview as? UIView & CanvasItemViewProtocol else { continue }
+				if view.minimumNumberOfTouches > gesture.numberOfTouches {
+					continue
+				}
+				if view.intersectsWith(gestureShadowView) {
+					self.initialCenter = view.center
+					currentlyMoving = view
+					
+					// Means it a image view
+					if view.minimumNumberOfTouches != 2 {
+						drawingPaper.bringSubviewToFront(currentlyMoving)
+					}
+				}
+			}
+		}
+		
+		if (gesture.state == .changed) {
+			return currentlyMoving
+		}
+		
+		return nil
 	}
 	
 	@objc func swiper(_ gestureRecognizer: TouchCaptureGesture) {
@@ -44,63 +96,44 @@ extension EditorViewController {
 	
 	
 	@objc func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
-		guard let gestureView = gestureRecognizer.view else { return  }
-		for subview in gestureView.subviews {
-			guard let view = subview as? UIView & CanvasItemViewProtocol else { continue }
-			if view.minimumNumberOfTouches > gestureRecognizer.numberOfTouches {
-				continue
-			}
-			let translation = gestureRecognizer.translation(in: self.view)
-			if gestureRecognizer.state == .began {
-				self.initialCenter = view.center
-			}
-			if gestureRecognizer.state != .cancelled {
-				let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y + translation.y)
-				view.center = newCenter
-			} else {
-				view.center = initialCenter
-			}
+		guard let closestView = getClosetView(for: gestureRecognizer) else {
+			return
 		}
+		
+		let translation = gestureRecognizer.translation(in: self.view)
+
+		if gestureRecognizer.state != .cancelled {
+			let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y + translation.y)
+			closestView.center = newCenter
+		} else {
+			closestView.center = initialCenter
+		}
+	
 	}
 	
 	
 	@objc func handleRotate(_ gestureRecognizer: UIRotationGestureRecognizer) {
-		let view = gestureRecognizer.view
-		let loc = gestureRecognizer.location(in: view)
-		
-		guard let subview = view?.hitTest(loc, with: nil) else {
+		guard let closestView = getClosetView(for: gestureRecognizer) else {
 			return
 		}
-		
-		if gestureRecognizer.state == .began {
-			currentlyMoving = subview
-		}
-		
+
 		if gestureRecognizer.state != .cancelled {
-			currentlyMoving.transform =  currentlyMoving.transform.rotated(by: gestureRecognizer.rotation)
+			closestView.transform =  closestView.transform.rotated(by: gestureRecognizer.rotation)
 		}
-		
+
 		gestureRecognizer.rotation = 0;
 	}
 	
 	
 	@objc func handleScale(_ gestureRecognizer: UIPinchGestureRecognizer) {
-		let view = gestureRecognizer.view
-		let loc = gestureRecognizer.location(in: view)
-		
-		guard let subview = view?.hitTest(loc, with: nil) else {
+		guard let closestView = getClosetView(for: gestureRecognizer) else {
 			return
 		}
-		
-		if gestureRecognizer.state == .began {
-			currentlyMoving = subview
-		}
-		
+
 		if gestureRecognizer.state != .cancelled {
-			currentlyMoving.transform = currentlyMoving.transform.scaledBy(x: gestureRecognizer.scale, y: gestureRecognizer.scale)
+			closestView.transform = closestView.transform.scaledBy(x: gestureRecognizer.scale, y: gestureRecognizer.scale)
 		}
-		
-		
+
 		gestureRecognizer.scale = 1;
 	}
 

@@ -19,6 +19,8 @@
 		F13FA008245733C1000E4C2D /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA007245733C1000E4C2D /* CompletionView.swift */; };
 		F13FA00A24573412000E4C2D /* CompletionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00924573412000E4C2D /* CompletionViewModel.swift */; };
 		F13FA00C24573FE8000E4C2D /* EditorViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */; };
+		F13FA00E24577FB4000E4C2D /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00D24577FB4000E4C2D /* UIView.swift */; };
+		F13FA010245781E6000E4C2D /* CGRect+Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00F245781E6000E4C2D /* CGRect+Center.swift */; };
 		F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EED82434E6CD00FA0B49 /* AppDelegate.swift */; };
 		F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */; };
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
@@ -26,6 +28,7 @@
 		F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19ABF40244C9B2C005C8ED9 /* Constants.swift */; };
 		F1B3F01F2455BB10001F419C /* TouchStateCaptureGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */; };
 		F1B3F0212455CEC7001F419C /* CanvasItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B3F0202455CEC7001F419C /* CanvasItem.swift */; };
+		F1B7F5562459C8BC00A2C720 /* EditorViewController+TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B7F5552459C8BC00A2C720 /* EditorViewController+TextView.swift */; };
 		F1BFD685244B659800513C9A /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1BFD684244B659800513C9A /* PhotoView.swift */; };
 		F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */; };
 		F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */; };
@@ -51,6 +54,8 @@
 		F13FA007245733C1000E4C2D /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
 		F13FA00924573412000E4C2D /* CompletionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionViewModel.swift; sourceTree = "<group>"; };
 		F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Gestures.swift"; sourceTree = "<group>"; };
+		F13FA00D24577FB4000E4C2D /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		F13FA00F245781E6000E4C2D /* CGRect+Center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Center.swift"; sourceTree = "<group>"; };
 		F162EED52434E6CD00FA0B49 /* InstaStories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F162EED82434E6CD00FA0B49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +65,7 @@
 		F19ABF40244C9B2C005C8ED9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchStateCaptureGesture.swift; sourceTree = "<group>"; };
 		F1B3F0202455CEC7001F419C /* CanvasItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasItem.swift; sourceTree = "<group>"; };
+		F1B7F5552459C8BC00A2C720 /* EditorViewController+TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+TextView.swift"; sourceTree = "<group>"; };
 		F1BFD684244B659800513C9A /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		F1C2AEC6244A06AD00F54CA2 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
 		F1C2AEC8244A077A00F54CA2 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
@@ -161,6 +167,7 @@
 				F1C7BD492451F3B000E0C638 /* ColorsCollectionViewController.swift */,
 				F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */,
 				F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */,
+				F1B7F5552459C8BC00A2C720 /* EditorViewController+TextView.swift */,
 			);
 			path = InstaStories;
 			sourceTree = "<group>";
@@ -179,6 +186,8 @@
 			children = (
 				F1FA0CE224466AF5005D2801 /* UIViewController.swift */,
 				F13F9FFF24570FB1000E4C2D /* Double.swift */,
+				F13FA00D24577FB4000E4C2D /* UIView.swift */,
+				F13FA00F245781E6000E4C2D /* CGRect+Center.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -296,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F13FA00E24577FB4000E4C2D /* UIView.swift in Sources */,
 				F1FA0CE524466E0C005D2801 /* PhotosViewModel.swift in Sources */,
 				F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */,
 				F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */,
@@ -304,6 +314,7 @@
 				F1C2AEC9244A077A00F54CA2 /* EditorViewController.swift in Sources */,
 				F1B3F01F2455BB10001F419C /* TouchStateCaptureGesture.swift in Sources */,
 				F1C2AEC7244A06AD00F54CA2 /* EditorViewModel.swift in Sources */,
+				F13FA010245781E6000E4C2D /* CGRect+Center.swift in Sources */,
 				F1BFD685244B659800513C9A /* PhotoView.swift in Sources */,
 				F1FA0CE324466AF5005D2801 /* UIViewController.swift in Sources */,
 				F136F262244DDB09004E570D /* ColorCell.swift in Sources */,
@@ -321,6 +332,7 @@
 				F13FA00024570FB1000E4C2D /* Double.swift in Sources */,
 				F136F264244DF5C6004E570D /* ColorsViewModel.swift in Sources */,
 				F13FA008245733C1000E4C2D /* CompletionView.swift in Sources */,
+				F1B7F5562459C8BC00A2C720 /* EditorViewController+TextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

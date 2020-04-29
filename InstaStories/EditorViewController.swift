@@ -10,9 +10,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 import YogaKit
-
+import NotificationCenter
 
 class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
+	
+	let gestureShadowView = UIView(frame: .zero)
 	
 	var initialCenter = CGPoint()
 	
@@ -20,7 +22,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	var initialImage: PhotoView
 	
-	private let viewModel: EditorViewModel!
+	let viewModel: EditorViewModel!
 		
 	var imageView: UIImageView!
 	
@@ -28,7 +30,6 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var colorsCollectionViewController: ColorsCollectionViewController!
 	
 	// VIEWS
-	
 	var sceneNavigatorView: UIView!
 	var saveView: UIView!
 	var completionView: UIView!
@@ -43,10 +44,18 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var closeButton: UIButton!
 	var saveButton: UIButton!
 	var doneButton: UIButton!
-		
-	var currentDrawingColor: UIColor = Constants.colors.first!
-	var currentlyMoving: UIView!
+	
+	// TEXTVIEWS
+	var activeTextView: UITextView!
+	var textViewLastFrame: CGRect!
+	var textViewLastTransform: CGAffineTransform?
 
+	var currentDrawingColor: UIColor = Constants.colors.first!
+	
+	var currentlyMoving: ClosestView!
+
+	var keyboardHeight: CGFloat = 0
+	
 	let drawingPaper: UIView = {
 		let view = UIView()
 		
@@ -89,7 +98,16 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		viewModel.addItem(item: initialImage)
 		viewModel.fetchOriginalImage(localIdentifier: initialImage.localIdentifier)
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIWindow.keyboardWillShowNotification, object: nil)
+	
 	}
+	@objc func keyboardWillShow(notification: NSNotification) {
+		if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+			keyboardHeight = keyboardSize.height
+		}
+	}
+
 	
 	// MARK: Main Scene
 	
@@ -144,10 +162,11 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 		viewModel.colors.map { $0.first{ $0.isActive} }.subscribe(onNext: { activeColor in
 			self.currentDrawingColor = activeColor!.value
+			self.activeTextView?.textColor = self.currentDrawingColor
 		}).disposed(by: bag)
 		
 		colorsCollectionViewController = ColorsCollectionViewController(viewModel: viewModel)
-
+		
 		colorsCollectionViewController.view.configureLayout { layout in
 			layout.isEnabled = true
 			layout.position = .absolute
@@ -220,11 +239,17 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 					self.rotationGesture.isEnabled = false
 				
 				case .addingTextField:
+					self.completionView.isHidden = false
+					self.sceneNavigatorView.isHidden = true
+					self.saveView.isHidden = true
+					self.colorsCollectionViewController.view.isHidden = false
 					self.continiousGesture?.isEnabled = false
 					self.pinchGesture.isEnabled = false
 					self.panGesture.isEnabled = false
 					self.rotationGesture.isEnabled = false
-					self.createTextView()
+					if self.activeTextView == nil {
+						self.createTextView()
+					}
 			}
 		}).disposed(by: bag)
 		
@@ -254,30 +279,21 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	func createTextView() {
 		let canvasItem = CanvasItem(minimumNumberOfTouches: 1, frame: .zero)
 		let textView = UITextView()
-		
 		textView.backgroundColor = .clear
-		textView.textAlignment = .center
-		textView.sizeToFit()
 		textView.isScrollEnabled = false
-		textView.font = .boldSystemFont(ofSize: 30)
-		textView.textColor = .white
+		textView.textAlignment = .center
+		textView.font = .boldSystemFont(ofSize: 35)
+		textView.textColor = self.currentDrawingColor
 		textView.delegate = self
-		textView.becomeFirstResponder()
-		textView.center = CGPoint(x: self.view.frame.size.width  / 2,
-																 y: self.view.frame.size.height / 2)
 		canvasItem.addSubview(textView)
 		drawingPaper.addSubview(canvasItem)
 		
+		
+		textView.becomeFirstResponder()
+		
 		textViewDidChange(textView)
+
+
 	}
 	
 }
-
-extension EditorViewController: UITextViewDelegate {
-	func textViewDidChange(_ textView: UITextView) {
-		let newSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-		textView.frame = CGRect(origin: textView.frame.origin, size: newSize)
-	}
-}
-
-
