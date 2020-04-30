@@ -83,11 +83,13 @@ extension EditorViewController {
 		if (gesture.state == .changed) {
 		
 			if gestureIntersetsWithTrash(gesture: gesture) {
-				UIView.animate(withDuration: 0.3) {
+				UIView.animate(withDuration: 0.3) { [weak self] in
+					guard let self = self else { return }
 					self.trashView.trashArea.transform = .init(scaleX: 0.6, y: 0.6)
 				}
 			} else {
-				UIView.animate(withDuration: 0.3) {
+				UIView.animate(withDuration: 0.3) { [weak self] in
+					guard let self = self else { return }
 					self.trashView.trashArea.transform = .identity
 				}
 			}

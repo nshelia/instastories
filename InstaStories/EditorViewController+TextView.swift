@@ -39,7 +39,8 @@ extension EditorViewController: UITextViewDelegate {
 		self.textViewLastTransform = textView.superview?.transform
 		self.textViewLastFrame = self.lastFrameForTextView(textView:textView)
 		
-		UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 4, options: .curveEaseInOut, animations: {
+		UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 4, options: .curveEaseInOut, animations: { [weak self] in
+			guard let self = self else { return }
 			textView.superview?.transform = .identity
 			self.textViewDidChange(textView)
 		})
@@ -65,7 +66,9 @@ extension EditorViewController: UITextViewDelegate {
 			textView.superview?.removeFromSuperview()
 		}
 		
-		UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 4, options: .curveEaseInOut, animations: {
+		UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 4, options: .curveEaseInOut, animations: { [weak self] in
+			guard let self = self else { return }
+
 			if let frame = self.textViewLastFrame {
 				textView.superview?.center = frame.center
 			}

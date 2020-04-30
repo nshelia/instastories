@@ -14,7 +14,7 @@ import NotificationCenter
 
 class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
-	let gestureShadowView = UIView(frame: .zero)
+	var gestureShadowView = UIView(frame: .zero)
 	
 	var initialCenter = CGPoint()
 	
@@ -47,7 +47,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var doneButton: UIButton!
 	
 	// TEXTVIEWS
-	var activeTextView: UITextView!
+	weak var activeTextView: UITextView!
 	var textViewLastFrame: CGRect!
 	var textViewLastTransform: CGAffineTransform?
 
@@ -115,7 +115,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	func addMainScene() {
 		let viewModel = SceneNavigatorViewModel()
 		
-		viewModel.closeButtonPress.subscribe(onNext: {
+		viewModel.closeButtonPress.subscribe(onNext: { [weak self] in
+			guard let self = self else {return }
 			let transition: CATransition = CATransition()
 			transition.duration =	0.3
 			transition.type = CATransitionType.fade
@@ -123,12 +124,12 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			self.navigationController?.popViewController(animated: false)
 		}).disposed(by: bag)
 		
-		viewModel.brushButtonPress.subscribe(onNext: {
-			self.viewModel.visibleScene.accept(.drawing)
+		viewModel.brushButtonPress.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.drawing)
 		}).disposed(by: bag)
 			
-		viewModel.textFieldButtonPress.subscribe(onNext: {
-			self.viewModel.visibleScene.accept(.addingTextField)
+		viewModel.textFieldButtonPress.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.addingTextField)
 		}).disposed(by: bag)
 		
 		sceneNavigatorView = SceneNavigatorView(viewModel: viewModel, frame:.zero)
@@ -156,8 +157,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 		let completionViewModel = CompletionViewModel()
 		
-		completionViewModel.doneButtonPress.subscribe(onNext: {
-			self.viewModel.visibleScene.accept(.main)
+		completionViewModel.doneButtonPress.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.main)
 		}).disposed(by: bag)
 		
 		
@@ -167,7 +168,8 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		let viewModel = ColorsViewModel()
 
-		viewModel.colors.map { $0.first{ $0.isActive} }.subscribe(onNext: { activeColor in
+		viewModel.colors.map { $0.first{ $0.isActive} }.subscribe(onNext: {  [weak self] activeColor in
+			guard let self = self else { return }
 			self.currentDrawingColor = activeColor!.value
 			self.activeTextView?.textColor = self.currentDrawingColor
 		}).disposed(by: bag)
@@ -238,7 +240,9 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	func bindViews() {
 		
-		currentlyMoving.subscribe(onNext: { item in
+		currentlyMoving.subscribe(onNext: { [weak self] item in
+			guard let self = self else { return }
+
 			if item != nil {
 				self.mainScene(visible: false)
 				if item?.minimumNumberOfTouches == 1 {
@@ -250,7 +254,9 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			}
 		}).disposed(by: bag)
 		
-		viewModel.visibleScene.subscribe(onNext: { currentScene in
+		viewModel.visibleScene.subscribe(onNext: { [weak self] currentScene in
+			guard let self = self else { return }
+
 			switch currentScene {
 				case .main:
 					self.view.endEditing(true)
