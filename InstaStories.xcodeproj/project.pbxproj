@@ -21,6 +21,7 @@
 		F13FA00C24573FE8000E4C2D /* EditorViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */; };
 		F13FA00E24577FB4000E4C2D /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00D24577FB4000E4C2D /* UIView.swift */; };
 		F13FA010245781E6000E4C2D /* CGRect+Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13FA00F245781E6000E4C2D /* CGRect+Center.swift */; };
+		F15D3FC8245AEA630097CA69 /* TrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15D3FC7245AEA630097CA69 /* TrashView.swift */; };
 		F162EED92434E6CD00FA0B49 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EED82434E6CD00FA0B49 /* AppDelegate.swift */; };
 		F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */; };
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
@@ -56,6 +57,7 @@
 		F13FA00B24573FE8000E4C2D /* EditorViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Gestures.swift"; sourceTree = "<group>"; };
 		F13FA00D24577FB4000E4C2D /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		F13FA00F245781E6000E4C2D /* CGRect+Center.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Center.swift"; sourceTree = "<group>"; };
+		F15D3FC7245AEA630097CA69 /* TrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashView.swift; sourceTree = "<group>"; };
 		F162EED52434E6CD00FA0B49 /* InstaStories.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InstaStories.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F162EED82434E6CD00FA0B49 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F162EEDA2434E6CD00FA0B49 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				F13F9FFD24570F1C000E4C2D /* SceneNavigatorView.swift */,
 				F13FA00524572C53000E4C2D /* SaveView.swift */,
 				F13FA007245733C1000E4C2D /* CompletionView.swift */,
+				F15D3FC7245AEA630097CA69 /* TrashView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				F1FA0CE324466AF5005D2801 /* UIViewController.swift in Sources */,
 				F136F262244DDB09004E570D /* ColorCell.swift in Sources */,
 				F13F9FFE24570F1C000E4C2D /* SceneNavigatorView.swift in Sources */,
+				F15D3FC8245AEA630097CA69 /* TrashView.swift in Sources */,
 				F1B3F0212455CEC7001F419C /* CanvasItem.swift in Sources */,
 				F1C7BD4A2451F3B000E0C638 /* ColorsCollectionViewController.swift in Sources */,
 				F1C7BD482451C11200E0C638 /* TouchCaptureGesture.swift in Sources */,

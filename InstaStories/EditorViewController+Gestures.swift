@@ -25,11 +25,24 @@ extension EditorViewController {
 		drawingPaper.layer.addSublayer(shapeLayer)
 	}
 	
+	func gestureIntersetsWithTrash(gesture: UIGestureRecognizer) -> Bool {
+		let location = gesture.location(in: drawingPaper)
+		let touchFrameSquared = CGRect(center: location, size: CGSize(width: 50.0, height: 50.0))
+		let trashViewFrame = CGRect(x: trashView.trashArea.frame.origin.x, y: trashView.frame.origin.y, width: trashView.frame.size.width, height: trashView.frame.size.height)
+		
+		return touchFrameSquared.intersects(trashViewFrame)
+	}
+	
 	private func getClosetView(for gesture: UIGestureRecognizer) -> ClosestView? {
 		if (gesture.state == .ended) {
+			
+			if gestureIntersetsWithTrash(gesture: gesture) {
+				currentlyMoving.value?.removeFromSuperview()
+			}
+			
 			gestureShadowView.transform = .identity
 			gestureShadowView.removeFromSuperview()
-			currentlyMoving = nil
+			currentlyMoving.accept(nil)
 			return nil
 		}
 
@@ -58,18 +71,28 @@ extension EditorViewController {
 				}
 				if view.intersectsWith(gestureShadowView) {
 					self.initialCenter = view.center
-					currentlyMoving = view
-					
+					currentlyMoving.accept(view)
 					// Means it a image view
 					if view.minimumNumberOfTouches != 2 {
-						drawingPaper.bringSubviewToFront(currentlyMoving)
+						drawingPaper.bringSubviewToFront(currentlyMoving.value!)
 					}
 				}
 			}
 		}
 		
 		if (gesture.state == .changed) {
-			return currentlyMoving
+		
+			if gestureIntersetsWithTrash(gesture: gesture) {
+				UIView.animate(withDuration: 0.3) {
+					self.trashView.trashArea.transform = .init(scaleX: 0.6, y: 0.6)
+				}
+			} else {
+				UIView.animate(withDuration: 0.3) {
+					self.trashView.trashArea.transform = .identity
+				}
+			}
+			
+			return currentlyMoving.value
 		}
 		
 		return nil
@@ -78,13 +101,11 @@ extension EditorViewController {
 	@objc func swiper(_ gestureRecognizer: TouchCaptureGesture) {
 		
 		if gestureRecognizer.state == .began {
-			completionView.isHidden = true
-			colorsCollectionViewController.view.isHidden = true
+			drawingScene(visible: false)
 		}
 		
 		if gestureRecognizer.state == .ended {
-			completionView.isHidden = false
-			colorsCollectionViewController.view.isHidden = false
+			drawingScene(visible: true)
 		}
 		
 		if (gestureRecognizer.samples.count > 1) {

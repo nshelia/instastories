@@ -33,6 +33,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	var sceneNavigatorView: UIView!
 	var saveView: UIView!
 	var completionView: UIView!
+	var trashView: TrashView!
 	
 	// GESTURES
 	let pinchGesture = UIPinchGestureRecognizer()
@@ -52,7 +53,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 	var currentDrawingColor: UIColor = Constants.colors.first!
 	
-	var currentlyMoving: ClosestView!
+	var currentlyMoving = BehaviorRelay<ClosestView?>(value: nil)
 
 	var keyboardHeight: CGFloat = 0
 	
@@ -133,11 +134,17 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		sceneNavigatorView = SceneNavigatorView(viewModel: viewModel, frame:.zero)
 		
 		saveView = SaveView(frame: .zero)
+		trashView = TrashView(frame: .zero)
+		
+		trashView.isHidden = true
 		
 		self.view.addSubview(sceneNavigatorView)
 		self.view.addSubview(saveView)
+		self.view.addSubview(trashView)
 		self.view.bringSubviewToFront(sceneNavigatorView)
 		self.view.bringSubviewToFront(saveView)
+		self.view.bringSubviewToFront(trashView)
+		
 		self.view.yoga.applyLayout(preservingOrigin: true)
 
 
@@ -213,40 +220,63 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		bindViews()
 	}
 
+	func mainScene(visible: Bool) {
+		sceneNavigatorView.isHidden = !visible
+		saveView.isHidden = !visible
+	}
+	
+	func drawingScene(visible: Bool) {
+		completionView?.isHidden = !visible
+		colorsCollectionViewController?.view.isHidden = !visible
+	}
+ 
+	func multiTouchGestures(enable: Bool) {
+		pinchGesture.isEnabled = enable
+		panGesture.isEnabled = enable
+		rotationGesture.isEnabled = enable
+	}
+	
 	func bindViews() {
+		
+		currentlyMoving.subscribe(onNext: { item in
+			if item != nil {
+				self.mainScene(visible: false)
+				if item?.minimumNumberOfTouches == 1 {
+					self.trashView.isHidden = false
+				}
+			} else {
+				self.mainScene(visible: true)
+				self.trashView.isHidden = true
+			}
+		}).disposed(by: bag)
+		
 		viewModel.visibleScene.subscribe(onNext: { currentScene in
 			switch currentScene {
 				case .main:
 					self.view.endEditing(true)
-					self.sceneNavigatorView.isHidden = false
-					self.completionView?.isHidden = true
-					self.saveView.isHidden = false
-					self.colorsCollectionViewController?.view.isHidden = true
+
+					self.mainScene(visible: true)
+					self.drawingScene(visible: false)
 					self.continiousGesture?.isEnabled = false
-					self.pinchGesture.isEnabled = true
-					self.panGesture.isEnabled = true
-					self.rotationGesture.isEnabled = true
+				
+					self.multiTouchGestures(enable: true)
 
 				case .drawing:
 					self.view.endEditing(true)
-					self.sceneNavigatorView.isHidden = true
-					self.saveView.isHidden = true
-					self.colorsCollectionViewController.view.isHidden = false
-					self.completionView.isHidden = false
+
+					self.mainScene(visible: false)
+					self.drawingScene(visible: true)
 					self.continiousGesture?.isEnabled = true
-					self.pinchGesture.isEnabled = false
-					self.panGesture.isEnabled = false
-					self.rotationGesture.isEnabled = false
-				
+					
+					self.multiTouchGestures(enable: false)
+
 				case .addingTextField:
-					self.completionView.isHidden = false
-					self.sceneNavigatorView.isHidden = true
-					self.saveView.isHidden = true
-					self.colorsCollectionViewController.view.isHidden = false
+					self.mainScene(visible: false)
+					self.drawingScene(visible: true)
 					self.continiousGesture?.isEnabled = false
-					self.pinchGesture.isEnabled = false
-					self.panGesture.isEnabled = false
-					self.rotationGesture.isEnabled = false
+
+					self.multiTouchGestures(enable: false)
+					
 					if self.activeTextView == nil {
 						self.createTextView()
 					}
