@@ -17,6 +17,7 @@ enum EditorScene {
 	case main
 	case drawing
 	case addingTextField
+	case stickers
 }
 
 
@@ -42,7 +43,6 @@ final class EditorViewModel {
 		allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 		
 		let result = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: allPhotosOptions)
-		
 		
 		result.enumerateObjects {
 			object, index, stop in

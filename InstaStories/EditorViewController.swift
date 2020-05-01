@@ -28,6 +28,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 	
 	// CHILD CONTROLLERS
 	var colorsCollectionViewController: ColorsCollectionViewController!
+	var stickersCollectionViewController: StickersCollectionViewController!
 	
 	// VIEWS
 	var sceneNavigatorView: UIView!
@@ -132,12 +133,42 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			self?.viewModel.visibleScene.accept(.addingTextField)
 		}).disposed(by: bag)
 		
+		viewModel.stickersButtonPress.subscribe(onNext: { [weak self] in
+			self?.viewModel.visibleScene.accept(.stickers)
+		}).disposed(by: bag)
+		
 		sceneNavigatorView = SceneNavigatorView(viewModel: viewModel, frame:.zero)
 		
 		saveView = SaveView(frame: .zero)
 		trashView = TrashView(frame: .zero)
 		
 		trashView.isHidden = true
+		
+		let stickersViewModel = StickersViewModel()
+		
+		stickersViewModel.imageSelected.subscribe(onNext: { image in
+			guard let selectedImage = image else { return }
+			self.createStickerView(image: selectedImage)
+			self.viewModel.visibleScene.accept(.main)
+		}).disposed(by: bag)
+		
+		stickersCollectionViewController = StickersCollectionViewController(viewModel: stickersViewModel)
+		
+		stickersCollectionViewController.view.configureLayout { layout in
+			layout.isEnabled = true
+			layout.position = .absolute
+			layout.bottom = YGValue(Constants.bottomSafeAreaHeight)
+			layout.width = YGValue(self.view.bounds.width)
+			layout.height = 700
+		}
+		
+		self.view.addSubview(stickersCollectionViewController.view)
+		
+		stickersCollectionViewController.willMove(toParent: self)
+		stickersCollectionViewController.didMove(toParent: self)
+		
+		self.addChild(stickersCollectionViewController)
+		stickersCollectionViewController.view.yoga.applyLayout(preservingOrigin: true)
 		
 		self.view.addSubview(sceneNavigatorView)
 		self.view.addSubview(saveView)
@@ -231,6 +262,11 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		completionView?.isHidden = !visible
 		colorsCollectionViewController?.view.isHidden = !visible
 	}
+	
+	func stickersScene(visible: Bool) {
+		completionView?.isHidden = !visible
+		stickersCollectionViewController.view.isHidden = !visible
+	}
  
 	func multiTouchGestures(enable: Bool) {
 		pinchGesture.isEnabled = enable
@@ -261,8 +297,10 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 				case .main:
 					self.view.endEditing(true)
 
-					self.mainScene(visible: true)
 					self.drawingScene(visible: false)
+					self.stickersScene(visible: false)
+					self.mainScene(visible: true)
+
 					self.continiousGesture?.isEnabled = false
 				
 					self.multiTouchGestures(enable: true)
@@ -271,6 +309,7 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 					self.view.endEditing(true)
 
 					self.mainScene(visible: false)
+					self.stickersScene(visible: false)
 					self.drawingScene(visible: true)
 					self.continiousGesture?.isEnabled = true
 					
@@ -278,14 +317,22 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 				case .addingTextField:
 					self.mainScene(visible: false)
+					self.stickersScene(visible: false)
 					self.drawingScene(visible: true)
+					
 					self.continiousGesture?.isEnabled = false
-
 					self.multiTouchGestures(enable: false)
 					
 					if self.activeTextView == nil {
 						self.createTextView()
 					}
+			case .stickers:
+				self.mainScene(visible: false)
+				self.drawingScene(visible: false)
+				
+				self.stickersScene(visible: true)
+				self.multiTouchGestures(enable: false)
+
 			}
 		}).disposed(by: bag)
 		
@@ -323,13 +370,25 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		textView.delegate = self
 		canvasItem.addSubview(textView)
 		drawingPaper.addSubview(canvasItem)
-		
-		
+	
 		textView.becomeFirstResponder()
 		
 		textViewDidChange(textView)
-
-
 	}
+	
+	
+	func createStickerView(image: UIImage) {
+		let canvasItem = CanvasItem(minimumNumberOfTouches: 1, frame: .zero)
+		let imageView = UIImageView(frame: CGRect.zero)
+		imageView.image = image
+		imageView.contentMode = .scaleAspectFit
+		canvasItem.frame.origin = CGPoint(x: self.view.center.x,y: (self.view.frame.size.height -  self.keyboardHeight) / 2)
+		canvasItem.frame.size = CGSize(width: 80, height: 80)
+		imageView.frame = canvasItem.bounds
+		canvasItem.addSubview(imageView)
+		drawingPaper.addSubview(canvasItem)
+		
+	}
+	
 	
 }

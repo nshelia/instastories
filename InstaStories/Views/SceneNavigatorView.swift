@@ -19,9 +19,9 @@ class SceneNavigatorView: UIView {
 	let bag = DisposeBag()
 	
 	var closeButton: UIButton!
-	var drawButton: UIButton!
 	var brushButton: UIButton!
 	var textFieldButton: UIButton!
+	var stickersButton: UIButton!
 	
 	func createCloseButton() -> UIButton {
 		closeButton = createHeaderButton(imageIdentifier: "close")
@@ -31,12 +31,6 @@ class SceneNavigatorView: UIView {
 		}).disposed(by: bag)
 		
 		return closeButton
-	}
-	
-	func createDrawButton(imageIdentifier: String) -> UIButton {
-		drawButton = createHeaderButton(imageIdentifier: imageIdentifier)
-		
-		return drawButton
 	}
 	
 	func createDoneButton() -> UIButton {
@@ -97,18 +91,25 @@ class SceneNavigatorView: UIView {
 
 		self.addSubview(drawingActionsView)
 
-		brushButton = createDrawButton(imageIdentifier: "brush")
+		brushButton = createHeaderButton(imageIdentifier: "brush")
 		
 		brushButton.rx.tap.subscribe(onNext: {
 			self.viewModel.brushButtonPress.accept(())
 		}).disposed(by: bag)
 		
-		textFieldButton = createDrawButton(imageIdentifier: "textField")
+		textFieldButton = createHeaderButton(imageIdentifier: "textField")
 		
 		textFieldButton.rx.tap.subscribe(onNext: {
 			self.viewModel.textFieldButtonPress.accept(())
 		}).disposed(by: bag)
 		
+		stickersButton = createHeaderButton(imageIdentifier: "stickers")
+		
+		stickersButton.rx.tap.subscribe(onNext: {
+			self.viewModel.stickersButtonPress.accept(())
+			}).disposed(by: bag)
+		
+		drawingActionsView.addSubview(stickersButton)
 		drawingActionsView.addSubview(brushButton)
 		drawingActionsView.addSubview(textFieldButton)
 

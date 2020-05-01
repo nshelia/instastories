@@ -15,5 +15,6 @@ final class SceneNavigatorViewModel {
 	let closeButtonPress = PublishRelay<Void>()
 	let brushButtonPress = PublishRelay<Void>()
 	let textFieldButtonPress = PublishRelay<Void>()
+	let stickersButtonPress = PublishRelay<Void>()
 
 }
