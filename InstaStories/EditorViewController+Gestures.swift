@@ -20,7 +20,9 @@ extension EditorViewController {
 		let shapeLayer = CAShapeLayer()
 		shapeLayer.path = path.cgPath
 		shapeLayer.strokeColor = currentDrawingColor.cgColor
-		shapeLayer.lineWidth = 5
+		shapeLayer.lineWidth = 10
+		shapeLayer.cornerRadius = 5
+		shapeLayer.lineCap = .round
 		
 		drawingPaper.layer.addSublayer(shapeLayer)
 	}
