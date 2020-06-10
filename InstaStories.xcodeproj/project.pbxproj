@@ -27,7 +27,6 @@
 		F162EEDD2434E6CD00FA0B49 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162EEDC2434E6CD00FA0B49 /* HomeViewController.swift */; };
 		F162EEE22434E6D200FA0B49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F162EEE12434E6D200FA0B49 /* Assets.xcassets */; };
 		F184F7DA245C43C300E558C8 /* StickersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F184F7D9245C43C300E558C8 /* StickersCollectionViewController.swift */; };
-		F184F7DC245C43F600E558C8 /* StickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F184F7DB245C43F600E558C8 /* StickerCell.swift */; };
 		F184F7DE245C448700E558C8 /* StickersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F184F7DD245C448700E558C8 /* StickersViewModel.swift */; };
 		F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19ABF40244C9B2C005C8ED9 /* Constants.swift */; };
 		F1B3F01F2455BB10001F419C /* TouchStateCaptureGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */; };
@@ -42,6 +41,7 @@
 		F1FA0CE024466AC2005D2801 /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FA0CDF24466AC2005D2801 /* PhotosViewController.swift */; };
 		F1FA0CE324466AF5005D2801 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FA0CE224466AF5005D2801 /* UIViewController.swift */; };
 		F1FA0CE524466E0C005D2801 /* PhotosViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FA0CE424466E0C005D2801 /* PhotosViewModel.swift */; };
+		F1FD34F02490C6A800558665 /* StickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FD34EF2490C6A800558665 /* StickerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,7 +69,6 @@
 		F162EEE12434E6D200FA0B49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F162EEE62434E6D200FA0B49 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F184F7D9245C43C300E558C8 /* StickersCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickersCollectionViewController.swift; sourceTree = "<group>"; };
-		F184F7DB245C43F600E558C8 /* StickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCell.swift; sourceTree = "<group>"; };
 		F184F7DD245C448700E558C8 /* StickersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickersViewModel.swift; sourceTree = "<group>"; };
 		F19ABF40244C9B2C005C8ED9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F1B3F01E2455BB10001F419C /* TouchStateCaptureGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchStateCaptureGesture.swift; sourceTree = "<group>"; };
@@ -84,6 +83,7 @@
 		F1FA0CDF24466AC2005D2801 /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		F1FA0CE224466AF5005D2801 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		F1FA0CE424466E0C005D2801 /* PhotosViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewModel.swift; sourceTree = "<group>"; };
+		F1FD34EF2490C6A800558665 /* StickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,7 +138,7 @@
 				F13FA00524572C53000E4C2D /* SaveView.swift */,
 				F13FA007245733C1000E4C2D /* CompletionView.swift */,
 				F15D3FC7245AEA630097CA69 /* TrashView.swift */,
-				F184F7DB245C43F600E558C8 /* StickerCell.swift */,
+				F1FD34EF2490C6A800558665 /* StickerCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -322,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F13FA00E24577FB4000E4C2D /* UIView.swift in Sources */,
+				F1FD34F02490C6A800558665 /* StickerCell.swift in Sources */,
 				F1FA0CE524466E0C005D2801 /* PhotosViewModel.swift in Sources */,
 				F184F7DA245C43C300E558C8 /* StickersCollectionViewController.swift in Sources */,
 				F19ABF41244C9B2C005C8ED9 /* Constants.swift in Sources */,
@@ -342,7 +343,6 @@
 				F1C7BD4A2451F3B000E0C638 /* ColorsCollectionViewController.swift in Sources */,
 				F1C7BD482451C11200E0C638 /* TouchCaptureGesture.swift in Sources */,
 				F12FEA532447CD5C0095BE24 /* PhotoCell.swift in Sources */,
-				F184F7DC245C43F600E558C8 /* StickerCell.swift in Sources */,
 				F13FA00624572C53000E4C2D /* SaveView.swift in Sources */,
 				F162EEDB2434E6CD00FA0B49 /* SceneDelegate.swift in Sources */,
 				F13FA00424571D3A000E4C2D /* SceneNavigatorViewModel.swift in Sources */,
