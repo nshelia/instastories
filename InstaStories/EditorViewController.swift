@@ -109,6 +109,16 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 			keyboardHeight = keyboardSize.height
 		}
 	}
+	
+	func saveImage() {
+		let renderer = UIGraphicsImageRenderer(size: self.drawingPaper.bounds.size)
+		let image = renderer.image { ctx in
+			view.drawHierarchy(in: self.drawingPaper.bounds, afterScreenUpdates: true)
+		}
+		
+		UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+
+	}
 
 	
 	// MARK: Main Scene
@@ -139,7 +149,13 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 		
 		sceneNavigatorView = SceneNavigatorView(viewModel: viewModel, frame:.zero)
 		
-		saveView = SaveView(frame: .zero)
+		let saveViewModel = SaveViewModel()
+		
+		saveViewModel.saveButtonPress.subscribe(onNext: { [weak self] in
+			self?.saveImage()
+		}).disposed(by: bag)
+		
+		saveView = SaveView(viewModel: saveViewModel, frame: .zero)
 		trashView = TrashView(frame: .zero)
 		
 		trashView.isHidden = true
@@ -181,7 +197,18 @@ class EditorViewController: UIViewController, UIGestureRecognizerDelegate {
 
 
 	}
-	
+	@objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+		if let error = error {
+			// we got back an error!
+			let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+			ac.addAction(UIAlertAction(title: "OK", style: .default))
+			present(ac, animated: true)
+		} else {
+			let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+			ac.addAction(UIAlertAction(title: "OK", style: .default))
+			present(ac, animated: true)
+		}
+	}
 	// MARK: Drawing Scene
 	
 	func addDrawingScene() {

@@ -21,12 +21,9 @@ final class StickersViewModel {
 	init() {
 		let fileManager = FileManager.default
 		let imagePath = Bundle.main.resourcePath! + "/Stickers/"
-		let imageNames: [String] = try! fileManager.contentsOfDirectory(atPath: imagePath)
+//		let imageNames: [String] = try! fileManager.contentsOfDirectory(atPath: imagePath)
 		
-		stickers.accept(imageNames.map { path in
-			return UIImage(contentsOfFile: imagePath + path)!
-				.withAlignmentRectInsets(UIEdgeInsets(top: -10, left: -10, bottom: -10,right: -10))
-			})
+		stickers.accept([])
 	}
 
 }

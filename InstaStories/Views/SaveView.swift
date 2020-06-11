@@ -14,6 +14,8 @@ import RxCocoa
 
 class SaveView: UIView {
 	
+	let viewModel: SaveViewModel
+
 	let bag = DisposeBag()
 	
 	var saveButton: UIButton!
@@ -37,7 +39,9 @@ class SaveView: UIView {
 		return saveButton
 	}
 	
-	override init(frame: CGRect) {
+	init(viewModel: SaveViewModel, frame: CGRect) {
+		self.viewModel = viewModel
+
 		super.init(frame: frame)
 		
 		self.configureLayout { layout in
@@ -51,7 +55,13 @@ class SaveView: UIView {
 			layout.bottom = YGValue(Constants.bottomSafeAreaHeight)
 		}
 				
+
+		
 		self.addSubview(createSaveButton())
+		
+		saveButton.rx.tap.subscribe(onNext: {
+			self.viewModel.saveButtonPress.accept(())
+		}).disposed(by: bag)
 		
 		self.yoga.applyLayout(preservingOrigin: true)
 		
